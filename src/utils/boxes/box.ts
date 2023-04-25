@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js'
 import { Coordinate } from '../coordinate'
-import { addOrUpdateInfoFromPrev } from '../info'
+import { addOrUpdateInfoFromPrev, deleteInfoFromPrev } from '../info'
 import { Size } from '../size'
 import { ChatBoxInfo } from './chat'
 import { ScreenBoxInfo } from './screen'
@@ -20,7 +20,7 @@ export const AllBoxType = Object.values(BoxTypes)
 export type BoxInfo = Coordinate &
   Size & {
     boxType: BoxType
-    id: number
+    id: string
     editorPeerId?: string
   }
 
@@ -39,3 +39,20 @@ export const setRoomBoxInfo = (roomBoxInfo: RoomBoxInfo) => {
     addOrUpdateInfoFromPrev(roomBoxInfo, (curr, info) => curr.id === info.id)
   )
 }
+
+// Delete
+export type DeleteRoomBoxInfo = {
+  deleteId: string
+}
+
+export const deleteRoomBoxInfo = (roomBoxInfo: RoomBoxInfo) => {
+  setRoomBoxInfos(
+    deleteInfoFromPrev(roomBoxInfo, (curr, info) => curr.id === info.id)
+  )
+}
+
+export const isDeleteRoomBoxInfo = (data: unknown): data is DeleteRoomBoxInfo =>
+  typeof data === 'object' &&
+  data !== null &&
+  Object.keys(data).length === 1 &&
+  typeof (data as DeleteRoomBoxInfo).deleteId === 'string'

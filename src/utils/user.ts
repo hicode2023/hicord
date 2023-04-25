@@ -1,3 +1,4 @@
+import { NIL as NIL_UUID } from 'uuid'
 import { createSignal } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { Coordinate } from './coordinate'
@@ -10,13 +11,18 @@ export const defaultUserAvatar = {
   subColor2: '#696969',
 }
 
+const RANDOM_VALUE = 96
+
 export const initialLocalUserInfo = () => ({
   stream: undefined,
   audioNodes: undefined,
   peerId: undefined,
-  talkBoxId: 0,
-  x: ROOM_WIDTH / 2,
-  y: ROOM_HEIGHT / 2,
+  talkBoxId: NIL_UUID,
+  x:
+    ROOM_WIDTH / 2 +
+    Math.floor(Math.random() * RANDOM_VALUE) -
+    RANDOM_VALUE / 2,
+  y: ROOM_HEIGHT / 2 - Math.floor(Math.random() * RANDOM_VALUE),
   deg: 0,
   userName: localStorage.getItem('localUserName') ?? 'No Name',
   muted: true,
@@ -85,9 +91,9 @@ export type RemoteUserAudioNodes = {
 
 export type TalkBoxId = {
   /**
-   * 0: main room, 1~: talk box id
+   * NIL_UUID: main room, 1~: talk box id
    */
-  talkBoxId: number
+  talkBoxId: string
 }
 
 export type UserName = {
